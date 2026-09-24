@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #e8dff0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard {
+            width: 500px;
+            padding: 40px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #d8c6e4, #efd0dc);
+            box-shadow: 0 15px 35px rgba(90, 70, 100, 0.18);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: #51415c;
+            font-size: 29px;
+        }
+
+        .subtitle {
+            color: #75667d;
+            font-size: 14px;
+            margin-top: 8px;
+            margin-bottom: 30px;
+        }
+
+        .otp-box {
+            background: #faf8fb;
+            border: 1px solid #c5b2ce;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .otp-title {
+            color: #75667d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        #otp {
+            font-size: 38px;
+            font-weight: bold;
+            letter-spacing: 10px;
+            color: #80549a;
+            margin: 10px 0;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #9b70ad;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .generate-btn:hover {
+            background: #895e9c;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 11px;
+            margin-top: 10px;
+            border: 1px solid #b99ac9;
+            border-radius: 10px;
+            background: transparent;
+            color: #80549a;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background: #eee4f2;
+        }
+
+        #message {
+            margin-top: 15px;
+            color: #75667d;
+            font-size: 13px;
+        }
+
+        .logout {
+            margin-top: 25px;
+            color: #80549a;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <h1>Admin Dashboard</h1>
+
+        <p class="subtitle">
+            Generate an OTP for user login
+        </p>
+
+        <div class="otp-box">
+
+            <div class="otp-title">
+                Current OTP
+            </div>
+
+            <div id="otp">
+                ----
+            </div>
+
+        </div>
+
+        <button class="generate-btn" onclick="generateOTP()">
+            Generate OTP
+        </button>
+
+        <button class="copy-btn" onclick="copyOTP()">
+            Copy OTP
+        </button>
+
+        <p id="message"></p>
+
+        <div class="logout" onclick="logout()">
+            Logout
+        </div>
+
+    </div>
+
+    <script>
+
+        function generateOTP() {
+
+            let otp = Math.floor(1000 + Math.random() * 9000);
+
+            localStorage.setItem("otp", otp);
+
+            document.getElementById("otp").textContent = otp;
+
+            document.getElementById("message").textContent =
+                "OTP generated successfully.";
+        }
+
+        function copyOTP() {
+
+            let otp = localStorage.getItem("otp");
+
+            if (!otp) {
+
+                document.getElementById("message").textContent =
+                    "Please generate an OTP first.";
+
+                return;
+            }
+
+            navigator.clipboard.writeText(otp);
+
+            document.getElementById("message").textContent =
+                "OTP copied!";
+        }
+
+        function logout() {
+
+            window.location.href = "admin.html";
+
+        }
+
+    </script>
+
+</body>
+</html>

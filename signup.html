@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #e8dff0;
+        }
+
+        .signup-container {
+            width: 390px;
+            padding: 40px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #d8c6e4, #efd0dc);
+            box-shadow: 0 15px 35px rgba(90, 70, 100, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .signup-container h1 {
+            text-align: center;
+            margin: 0;
+            color: #51415c;
+            font-size: 29px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #75667d;
+            margin-top: 8px;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #514858;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            margin-bottom: 18px;
+            border: 1px solid #c5b2ce;
+            border-radius: 10px;
+            background: #faf8fb;
+            color: #514858;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #9b8fa1;
+        }
+
+        input:focus {
+            border-color: #a77bb8;
+            box-shadow: 0 0 0 3px rgba(167, 123, 184, 0.18);
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        .password-box input {
+            padding-right: 45px;
+        }
+
+        .eye {
+            position: absolute;
+            right: 14px;
+            top: 13px;
+            cursor: pointer;
+            font-size: 17px;
+            color: #806f88;
+            user-select: none;
+        }
+
+        .password-info {
+            margin-top: -10px;
+            margin-bottom: 18px;
+            font-size: 12px;
+            color: #75667d;
+            line-height: 1.5;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 10px;
+            background: #9b70ad;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #895e9c;
+        }
+
+        .login {
+            text-align: center;
+            margin-top: 22px;
+            color: #75667d;
+            font-size: 14px;
+        }
+
+        .login a {
+            color: #80549a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login a:hover {
+            color: #69417f;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+            color: #9c5367;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="signup-container">
+
+        <h1>Create Account</h1>
+
+        <p class="subtitle">
+            Sign up to get started
+        </p>
+
+        <form id="signupForm">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Password</label>
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create a password"
+                    required
+                >
+
+                <span
+                    class="eye"
+                    onclick="togglePassword()"
+                    id="eye"
+                >👁</span>
+
+            </div>
+
+            <div class="password-info">
+                Password must have at least 8 characters,
+                one uppercase letter, one lowercase letter,
+                one number, and one special character.
+            </div>
+
+            <button type="submit">
+                Sign Up
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+        <div class="login">
+            Already have an account?
+            <a href="index.html">Log In</a>
+        </div>
+
+    </div>
+
+    <script>
+
+        function togglePassword() {
+
+            let password = document.getElementById("password");
+            let eye = document.getElementById("eye");
+
+            if (password.type === "password") {
+
+                password.type = "text";
+                eye.textContent = "🙈";
+
+            } else {
+
+                password.type = "password";
+                eye.textContent = "👁";
+
+            }
+        }
+
+        document.getElementById("signupForm").addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+
+            let strongPassword =
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+            if (!strongPassword.test(password)) {
+
+                document.getElementById("message").textContent =
+                    "Password is not strong enough.";
+
+                return;
+            }
+
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userPassword", password);
+
+            document.getElementById("message").textContent =
+                "Account created successfully!";
+
+            setTimeout(function() {
+
+                window.location.href = "index.html";
+
+            }, 1000);
+
+        });
+
+    </script>
+
+</body>
+</html>

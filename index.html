@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Authentication System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #e8dff0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4d4055;
+        }
+
+        .container {
+            width: 400px;
+            padding: 35px;
+            background: linear-gradient(145deg, #d8c6e4, #efd0dc);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(90, 70, 100, 0.18);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            color: #594563;
+        }
+
+        h2 {
+            color: #594563;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #6b5c70;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 8px 0;
+            border: 1px solid #c7b5cf;
+            border-radius: 10px;
+            outline: none;
+            background: #faf7fb;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #9b78a8;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #9b78a8;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #866593;
+        }
+
+        .secondary {
+            background: #c28fa5;
+        }
+
+        .secondary:hover {
+            background: #ad7b91;
+        }
+
+        .link {
+            margin-top: 15px;
+            color: #765b80;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .message {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        .password-box input {
+            padding-right: 45px;
+        }
+
+        .eye {
+            position: absolute;
+            right: 14px;
+            top: 21px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .otp-display {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 8px;
+            margin: 20px 0;
+            color: #6d4d78;
+        }
+
+        .logout {
+            background: #b87891;
+        }
+
+        .logout:hover {
+            background: #a4667d;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- MAIN MENU -->
+    <div id="mainMenu">
+        <h1>OTP Authentication</h1>
+        <p>Choose an option below</p>
+
+        <button onclick="showLogin()">User Login</button>
+        <button class="secondary" onclick="showSignup()">Sign Up</button>
+        <button onclick="showAdmin()">Admin Login</button>
+    </div>
+
+
+    <!-- SIGN UP -->
+    <div id="signupSection" class="hidden">
+        <h2>Create Account</h2>
+
+        <input type="email" id="signupEmail" placeholder="Email">
+
+        <div class="password-box">
+            <input type="password" id="signupPassword" placeholder="Password">
+            <span class="eye" onclick="toggleSignupPassword()">👁</span>
+        </div>
+
+        <p style="font-size: 12px;">
+            Password must have 8 characters, uppercase, lowercase,
+            number, and special character.
+        </p>
+
+        <button onclick="signup()">Create Account</button>
+
+        <div id="signupMessage" class="message"></div>
+
+        <div class="link" onclick="showMain()">
+            Back to Main Menu
+        </div>
+    </div>
+
+
+    <!-- USER LOGIN -->
+    <div id="loginSection" class="hidden">
+        <h2>User Login</h2>
+
+        <input type="email" id="loginEmail" placeholder="Email">
+
+        <div class="password-box">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <span class="eye" onclick="toggleLoginPassword()">👁</span>
+        </div>
+
+        <input type="text" id="loginOTP" placeholder="Enter 4-digit OTP" maxlength="4">
+
+        <button onclick="login()">Login</button>
+
+        <div id="loginMessage" class="message"></div>
+
+        <div class="link" onclick="showMain()">
+            Back to Main Menu
+        </div>
+    </div>
+
+
+    <!-- ADMIN LOGIN -->
+    <div id="adminLoginSection" class="hidden">
+        <h2>Admin Login</h2>
+
+        <input type="email" id="adminEmail" placeholder="Admin Email">
+        <input type="password" id="adminPassword" placeholder="Admin Password">
+
+        <button onclick="adminLogin()">Login as Admin</button>
+
+        <div id="adminMessage" class="message"></div>
+
+        <div class="link" onclick="showMain()">
+            Back to Main Menu
+        </div>
+    </div>
+
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminDashboard" class="hidden">
+        <h2>Admin Dashboard</h2>
+
+        <p>Generated OTP:</p>
+
+        <div class="otp-display" id="otpDisplay">
+            ----
+        </div>
+
+        <button onclick="generateOTP()">
+            Generate OTP
+        </button>
+
+        <button class="secondary" onclick="copyOTP()">
+            Copy OTP
+        </button>
+
+        <div id="otpMessage" class="message"></div>
+
+        <button class="logout" onclick="adminLogout()">
+            Logout
+        </button>
+    </div>
+
+</div>
+
+
+<script>
+
+    function hideAll() {
+        document.getElementById("mainMenu").classList.add("hidden");
+        document.getElementById("signupSection").classList.add("hidden");
+        document.getElementById("loginSection").classList.add("hidden");
+        document.getElementById("adminLoginSection").classList.add("hidden");
+        document.getElementById("adminDashboard").classList.add("hidden");
+    }
+
+    function showMain() {
+        hideAll();
+        document.getElementById("mainMenu").classList.remove("hidden");
+    }
+
+    function showSignup() {
+        hideAll();
+        document.getElementById("signupSection").classList.remove("hidden");
+    }
+
+    function showLogin() {
+        hideAll();
+        document.getElementById("loginSection").classList.remove("hidden");
+    }
+
+    function showAdmin() {
+        hideAll();
+        document.getElementById("adminLoginSection").classList.remove("hidden");
+    }
+
+
+    function toggleSignupPassword() {
+        let password = document.getElementById("signupPassword");
+        let eye = document.querySelector("#signupSection .eye");
+
+        if (password.type === "password") {
+            password.type = "text";
+            eye.textContent = "🙈";
+        } else {
+            password.type = "password";
+            eye.textContent = "👁";
+        }
+    }
+
+
+    function toggleLoginPassword() {
+        let password = document.getElementById("loginPassword");
+        let eye = document.querySelector("#loginSection .eye");
+
+        if (password.type === "password") {
+            password.type = "text";
+            eye.textContent = "🙈";
+        } else {
+            password.type = "password";
+            eye.textContent = "👁";
+        }
+    }
+
+
+    function signup() {
+
+        let email = document.getElementById("signupEmail").value;
+        let password = document.getElementById("signupPassword").value;
+        let message = document.getElementById("signupMessage");
+
+        let strongPassword =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+        if (email === "" || password === "") {
+            message.textContent = "Please fill in all fields.";
+            message.style.color = "#a34f68";
+            return;
+        }
+
+        if (!strongPassword.test(password)) {
+            message.textContent =
+                "Password is not strong enough.";
+            message.style.color = "#a34f68";
+            return;
+        }
+
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userPassword", password);
+
+        message.textContent =
+            "Account created successfully!";
+        message.style.color = "#657c61";
+
+        setTimeout(function() {
+            showLogin();
+        }, 1000);
+    }
+
+
+    function login() {
+
+        let email = document.getElementById("loginEmail").value;
+        let password = document.getElementById("loginPassword").value;
+        let otp = document.getElementById("loginOTP").value;
+
+        let savedEmail = localStorage.getItem("userEmail");
+        let savedPassword = localStorage.getItem("userPassword");
+        let savedOTP = localStorage.getItem("otp");
+
+        let message = document.getElementById("loginMessage");
+
+        if (email !== savedEmail || password !== savedPassword) {
+            message.textContent = "Incorrect email or password.";
+            message.style.color = "#a34f68";
+            return;
+        }
+
+        if (otp !== savedOTP) {
+            message.textContent = "Invalid OTP.";
+            message.style.color = "#a34f68";
+            return;
+        }
+
+        message.textContent = "Login successful!";
+        message.style.color = "#657c61";
+
+        setTimeout(function() {
+            window.location.href = "home.html";
+        }, 800);
+    }
+
+
+    function adminLogin() {
+
+        let email = document.getElementById("adminEmail").value;
+        let password = document.getElementById("adminPassword").value;
+
+        let message = document.getElementById("adminMessage");
+
+        if (email === "admin@gmail.com" &&
+            password === "Admin@123") {
+
+            message.textContent = "Admin login successful!";
+            message.style.color = "#657c61";
+
+            setTimeout(function() {
+                hideAll();
+                document.getElementById("adminDashboard")
+                    .classList.remove("hidden");
+            }, 700);
+
+        } else {
+            message.textContent = "Incorrect admin credentials.";
+            message.style.color = "#a34f68";
+        }
+    }
+
+
+    function generateOTP() {
+
+        let otp = Math.floor(1000 + Math.random() * 9000);
+
+        localStorage.setItem("otp", otp);
+
+        document.getElementById("otpDisplay").textContent = otp;
+
+        document.getElementById("otpMessage").textContent =
+            "OTP generated. Give this OTP to the user.";
+
+        document.getElementById("otpMessage").style.color =
+            "#657c61";
+    }
+
+
+    function copyOTP() {
+
+        let otp = localStorage.getItem("otp");
+
+        if (!otp) {
+            document.getElementById("otpMessage").textContent =
+                "Please generate an OTP first.";
+            document.getElementById("otpMessage").style.color =
+                "#a34f68";
+            return;
+        }
+
+        navigator.clipboard.writeText(otp);
+
+        document.getElementById("otpMessage").textContent =
+            "OTP copied successfully!";
+        document.getElementById("otpMessage").style.color =
+            "#657c61";
+    }
+
+
+    function adminLogout() {
+        showMain();
+    }
+
+</script>
+
+</body>
+</html>

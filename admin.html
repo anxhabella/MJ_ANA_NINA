@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #e8dff0;
+        }
+
+        .admin-container {
+            width: 390px;
+            padding: 40px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #d8c6e4, #efd0dc);
+            box-shadow: 0 15px 35px rgba(90, 70, 100, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0;
+            color: #51415c;
+            font-size: 29px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #75667d;
+            margin-top: 8px;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #514858;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 18px;
+            border: 1px solid #c5b2ce;
+            border-radius: 10px;
+            background: #faf8fb;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #a77bb8;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #9b70ad;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #895e9c;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+            color: #9c5367;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+
+        <h1>Admin Login</h1>
+
+        <p class="subtitle">
+            Login to access the dashboard
+        </p>
+
+        <form id="adminForm">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                id="adminEmail"
+                placeholder="Enter admin email"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Enter admin password"
+                required
+            >
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+    </div>
+
+    <script>
+
+        document.getElementById("adminForm").addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+            let email = document.getElementById("adminEmail").value;
+            let password = document.getElementById("adminPassword").value;
+
+            if (email === "admin@gmail.com" && password === "Admin@123") {
+
+                window.location.href = "admin-dashboard.html";
+
+            } else {
+
+                document.getElementById("message").textContent =
+                    "Incorrect admin email or password.";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
